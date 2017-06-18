@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
+//De acuerdo a las especificacion es https://staff.washington.edu/dittrich/misc/fatgen103.pdf para FAT16
+
 namespace Fat16DiscoVirtual.FAT16
 {
     [Serializable]

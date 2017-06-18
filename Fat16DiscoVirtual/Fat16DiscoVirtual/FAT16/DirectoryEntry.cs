@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+//De acuerdo a las especificacion es https://staff.washington.edu/dittrich/misc/fatgen103.pdf para FAT16
+
 namespace Fat16DiscoVirtual.FAT16
 {
     class DirectoryEntry
@@ -11,18 +13,17 @@ namespace Fat16DiscoVirtual.FAT16
         public DirectoryEntry()
         {
             DIR_NAME = new byte[8];
-            DIR_EXT = new byte[3];
-            DIR_ATTR = new byte();
-            DIR_NTRES = new byte();
-            DIR_CrtTimeTenth = new byte();
-            DIR_CrtTime = new ushort();
-            DIR_CrtDate = new byte[2];
             DIR_LstAccDate = new byte[2];
-            DIR_FstClustHI= new ushort();
-            DIR_WrtTime = new byte[2];
             DIR_WrtDate = new byte[2];
+            DIR_CrtTimeTenth = new byte();
             DIR_FstClustLO = new ushort();
+            DIR_NTRES = new byte();
             DIR_FileSize = new uint();
+            DIR_FstClustHI= new ushort();
+            DIR_EXT = new byte[3];DIR_WrtTime = new byte[2];
+            DIR_CrtDate = new byte[2];
+            DIR_CrtTime = new ushort();
+            DIR_ATTR = new byte();
         }
 
         public byte[] DIR_NAME { get; set; }    //Offset 0 - 8 bytes. Primeros ocho caracteres del nombre del archivo con el formato 8.3
