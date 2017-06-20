@@ -21,6 +21,7 @@ namespace Fat16DiscoVirtual
         public Main()
         {
             InitializeComponent();
+            this.StartPosition=FormStartPosition.CenterScreen;
         }
 
         public static string Default { get; set; }
@@ -34,7 +35,7 @@ namespace Fat16DiscoVirtual
                 if (!File.Exists(NewFileDialog.FileName))
                 {
                     FileStream fs = new FileStream(NewFileDialog.FileName, FileMode.CreateNew);
-                    fs.Seek(1024*1024*1024, SeekOrigin.Begin);
+                    fs.Seek(1024 * 1024 * 1024, SeekOrigin.Begin);
                     fs.WriteByte(0);
                     fs.Close();
 
@@ -68,9 +69,9 @@ namespace Fat16DiscoVirtual
                         stream.Write(table.EndOfSector);
 
                         FileAllocationTable[] FAT = new FileAllocationTable[65525];
-                        for (int a=0; a<2;a++)
+                        for (int a = 0; a < 2; a++)
                         {
-                            for (int i=0;i<65525;i++)
+                            for (int i = 0; i < 65525; i++)
                             {
                                 FAT[i] = new FileAllocationTable();
                                 if (i >= 2)
@@ -82,13 +83,13 @@ namespace Fat16DiscoVirtual
                                     FAT[i].ClusterReserved();
                                 }
                             }
-                            foreach (FileAllocationTable fentry in FAT)
+                            foreach (FileAllocationTable fat in FAT)
                             {
-                                stream.Write(fentry.entrada);
+                                stream.Write(fat.entrada);
                             }
                         }
 
-                        for (int i=0;i<512;i++)
+                        for (int i = 0; i < 512; i++)
                         {
                             DirectoryEntry EmptyDir = new DirectoryEntry();
 
@@ -107,13 +108,12 @@ namespace Fat16DiscoVirtual
                             stream.Write(EmptyDir.DIR_FileSize);
                         }
                     }
-
                     Main.Default = Path.GetFullPath(NewFileDialog.FileName);
-                    MessageBox.Show("Disco Creado Exitosamente!", "Aviso", MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
+                    MessageBox.Show("Disco Creado Exitosamente!", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
                 else
                 {
-                    MessageBox.Show("Error en el archivo!","Error",MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Error en el archivo!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
             }
@@ -132,11 +132,32 @@ namespace Fat16DiscoVirtual
                 }
                 else
                 {
-                    MessageBox.Show("Seleccione un Archivo Valido!","Error!",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                    MessageBox.Show("Seleccione un Archivo Valido!", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
             }
         }
 
+        private void administrardisco_Click(object sender, EventArgs e)
+        {
+            if (Default != null)
+            {
+                if (!Application.OpenForms.OfType<AdministrarDisco>().Any())
+                {
+                    AdministrarDisco administrador = new AdministrarDisco();
+                    administrador.StartPosition=FormStartPosition.CenterScreen;
+                    administrador.Show();
+                }
+            }
+            else
+            {
+                MessageBox.Show("No hay ningun Disco Abierto, Cargue uno desde « Abrir Disco »", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void eliminar_Click(object sender, EventArgs e)
+        {
+            Default = null;
+        }
     }
 }

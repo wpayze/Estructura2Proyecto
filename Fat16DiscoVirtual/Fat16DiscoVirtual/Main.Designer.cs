@@ -31,8 +31,9 @@
             this.creardisco = new System.Windows.Forms.Button();
             this.abrirdisco = new System.Windows.Forms.Button();
             this.administrardisco = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.eliminar = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // creardisco
@@ -69,16 +70,7 @@
             this.administrardisco.TabIndex = 2;
             this.administrardisco.Text = "Administrar Disco";
             this.administrardisco.UseVisualStyleBackColor = false;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.label3.Location = new System.Drawing.Point(9, 239);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(181, 13);
-            this.label3.TabIndex = 3;
-            this.label3.Text = "Wilfredo Paiz - Estructura de Datos II";
+            this.administrardisco.Click += new System.EventHandler(this.administrardisco_Click);
             // 
             // label4
             // 
@@ -91,10 +83,31 @@
             this.label4.TabIndex = 4;
             this.label4.Text = "FAT16";
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.BackColor = System.Drawing.SystemColors.HighlightText;
+            this.label3.Location = new System.Drawing.Point(12, 242);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(181, 13);
+            this.label3.TabIndex = 3;
+            this.label3.Text = "Wilfredo Paiz - Estructura de Datos II";
+            // 
+            // eliminar
+            // 
+            this.eliminar.Location = new System.Drawing.Point(249, 236);
+            this.eliminar.Name = "eliminar";
+            this.eliminar.Size = new System.Drawing.Size(159, 24);
+            this.eliminar.TabIndex = 5;
+            this.eliminar.Text = "Eliminar Disco Seleccionado";
+            this.eliminar.UseVisualStyleBackColor = true;
+            this.eliminar.Click += new System.EventHandler(this.eliminar_Click);
+            // 
             // Main
             // 
             this.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.ClientSize = new System.Drawing.Size(434, 261);
+            this.ClientSize = new System.Drawing.Size(434, 272);
+            this.Controls.Add(this.eliminar);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.administrardisco);
@@ -117,8 +130,9 @@
         private System.Windows.Forms.Button creardisco;
         private System.Windows.Forms.Button abrirdisco;
         private System.Windows.Forms.Button administrardisco;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button eliminar;
     }
 }
 

@@ -44,6 +44,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdministrarDisco.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AdministrarDisco.Designer.cs">
+      <DependentUpon>AdministrarDisco.cs</DependentUpon>
+    </Compile>
     <Compile Include="FAT16\DirectoryEntry.cs" />
     <Compile Include="FAT16\DMBR.cs" />
     <Compile Include="FAT16\FileAllocationTable.cs" />
@@ -56,6 +62,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AdministrarDisco.resx">
+      <DependentUpon>AdministrarDisco.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
