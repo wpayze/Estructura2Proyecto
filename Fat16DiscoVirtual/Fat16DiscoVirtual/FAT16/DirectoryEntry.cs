@@ -13,15 +13,16 @@ namespace Fat16DiscoVirtual.FAT16
         public DirectoryEntry()
         {
             DIR_NAME = new byte[8];
-            DIR_LstAccDate = new byte[2];
-            DIR_WrtDate = new byte[2];
+            DIR_LstAccDate = new ushort();
+            DIR_WrtDate = new ushort();
             DIR_CrtTimeTenth = new byte();
             DIR_FstClustLO = new ushort();
             DIR_NTRES = new byte();
             DIR_FileSize = new uint();
             DIR_FstClustHI= new ushort();
-            DIR_EXT = new byte[3];DIR_WrtTime = new byte[2];
-            DIR_CrtDate = new byte[2];
+            DIR_EXT = new byte[3];
+            DIR_WrtTime = new ushort();
+            DIR_CrtDate = new ushort();
             DIR_CrtTime = new ushort();
             DIR_ATTR = new byte();
         }
@@ -32,17 +33,29 @@ namespace Fat16DiscoVirtual.FAT16
         public byte DIR_NTRES { get; set; }     //Offset 12 - 1 bytes. Reservado, tiene que ser 0
         public byte DIR_CrtTimeTenth { get; set; }  //Offset 13 - 1 bytes.
         public ushort DIR_CrtTime { get; set; }     //Offset 14 - 2 bytes.
-        public byte[] DIR_CrtDate { get; set; }     //Offset 16 - 2 bytes.
-        public byte[] DIR_LstAccDate { get; set; }      //Offset 18 - 2 bytes.
+        public ushort DIR_CrtDate { get; set; }     //Offset 16 - 2 bytes.
+        public ushort DIR_LstAccDate { get; set; }      //Offset 18 - 2 bytes.
         public ushort DIR_FstClustHI { get; set; }      //Offset 20 - 2 bytes.
-        public byte[] DIR_WrtTime { get; set; }     //Offset 22 - 2 bytes.
-        public byte[] DIR_WrtDate { get; set; }     //Offset 24 - 2 bytes.
+        public ushort DIR_WrtTime { get; set; }     //Offset 22 - 2 bytes.
+        public ushort DIR_WrtDate { get; set; }     //Offset 24 - 2 bytes.
         public ushort DIR_FstClustLO { get; set; }      //Offset 26 - 2 bytes
         public uint DIR_FileSize { get; set; }		//Offset 28 - 4 bytes
 
-        public void setclusterSubdirectorio(ushort nCluster)
+        public void SetclusterSub(ushort nCluster)
         {
             DIR_FstClustLO = nCluster;
+        }
+        public ushort setDays(DateTime date)
+        {
+            DateTime fechabase = DateTime.Parse("01/01/2017");
+            ushort result = (ushort)(date-fechabase).TotalDays;
+            return result;
+        }
+        public ushort setHrs(DateTime date)
+        {
+            DateTime fechabase = DateTime.Parse("00:00PM");
+            TimeSpan TSpan = date.Subtract(fechabase);
+            return (ushort)TSpan.TotalMinutes; ;
         }
 
         public void NewFile(string NameArchivo, char ATTR, DateTime CRT, ushort FstClust, uint size)
@@ -59,12 +72,12 @@ namespace Fat16DiscoVirtual.FAT16
             DIR_NTRES = 0;
             DIR_NAME = aux;
             DIR_EXT = aux;
-            DIR_CrtTime = ushort.Parse(CRT.ToString("HHmm"));
-            DIR_CrtDate = Encoding.ASCII.GetBytes(CRT.ToString("ddMMyy"));
-            DIR_LstAccDate = Encoding.ASCII.GetBytes(CRT.ToShortDateString());
+            DIR_CrtTime = setHrs(CRT);
+            DIR_CrtDate = setDays(CRT);
+            DIR_LstAccDate = setDays(CRT);
             DIR_FstClustHI = 0;
-            DIR_WrtTime = Encoding.ASCII.GetBytes(CRT.ToShortTimeString());
-            DIR_WrtDate = Encoding.ASCII.GetBytes(CRT.ToShortDateString());
+            DIR_WrtTime = setHrs(CRT);
+            DIR_WrtDate = setDays(CRT);
             DIR_FstClustLO = FstClust;
             DIR_FileSize = size;
         }
@@ -77,13 +90,13 @@ namespace Fat16DiscoVirtual.FAT16
             DIR_EXT = new byte[3];
             DIR_ATTR = Convert.ToByte('D');
             DIR_NTRES = 0;
-            DIR_CrtTimeTenth = Convert.ToByte(CRT.Millisecond);
-            DIR_CrtTime = ushort.Parse(CRT.ToString("HHmm"));
-            DIR_CrtDate = Encoding.ASCII.GetBytes(CRT.ToShortDateString());
-            DIR_LstAccDate = Encoding.ASCII.GetBytes(CRT.ToShortDateString());
+            DIR_CrtTimeTenth = Convert.ToByte(CRT.Millisecond / 10);
+            DIR_CrtTime = setHrs(CRT);
+            DIR_CrtDate = setDays(CRT);
+            DIR_LstAccDate = setDays(CRT);
             DIR_FstClustHI = 0;
-            DIR_WrtTime = Encoding.ASCII.GetBytes(CRT.ToShortTimeString());
-            DIR_WrtDate = Encoding.ASCII.GetBytes(CRT.ToShortDateString());
+            DIR_WrtTime = setHrs(CRT);
+            DIR_WrtDate = setDays(CRT);
             DIR_FstClustLO = 0;
             DIR_FileSize = 0;
         }

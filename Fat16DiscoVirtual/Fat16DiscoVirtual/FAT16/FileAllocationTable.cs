@@ -21,7 +21,7 @@ namespace Fat16DiscoVirtual.FAT16
 
         public void ClusterStart()
         {
-            entrada = 0;
+            entrada = new ushort();
         }
         
         public void ClusterFull(Nullable<ushort> NextCluster) //Si cluster lleno valor standar 65535

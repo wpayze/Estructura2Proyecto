@@ -39,53 +39,55 @@ namespace Fat16DiscoVirtual
                     fs.WriteByte(0);
                     fs.Close();
 
-                    MasterBootRecord table = new MasterBootRecord();
-                    table.DatosMBR();
+                    MasterBootRecord tablembr = new MasterBootRecord();
+                    tablembr.DatosMBR();
                     using (BinaryWriter stream = new BinaryWriter(File.Open(NewFileDialog.FileName, FileMode.Open)))
                     {
 
                         stream.BaseStream.Position = 0;
-                        stream.Write(table.JumpIns, 0, table.JumpIns.Length);
-                        stream.Write(table.OEMname, 0, table.OEMname.Length);
-                        stream.Write(table.BytesPerSector);
-                        stream.Write(table.SectorsPerCluster);
-                        stream.Write(table.ReservedSectors);
-                        stream.Write(table.NumeroDeFATS);
-                        stream.Write(table.RootEntryCount);
-                        stream.Write(table.SmallSectors);
-                        stream.Write(table.MediaDescriptor);
-                        stream.Write(table.SectorPerFATS);
-                        stream.Write(table.SectorPerTrack);
-                        stream.Write(table.NumeroHeads);
-                        stream.Write(table.HiddenSectors);
-                        stream.Write(table.LargeSectors);
-                        stream.Write(table.PhysicalDrive);
-                        stream.Write(table.Reservado);
-                        stream.Write(table.ExtBootSignature);
-                        stream.Write(table.Serial);
-                        stream.Write(table.VolumeLabel);
-                        stream.Write(table.FileSystemType);
-                        stream.Write(table.BootCode, 0, table.BootCode.Length);
-                        stream.Write(table.EndOfSector);
+                        stream.Write(tablembr.JumpIns, 0, tablembr.JumpIns.Length);
+                        stream.Write(tablembr.OEMname, 0, tablembr.OEMname.Length);
+                        stream.Write(tablembr.BytesPerSector);
+                        stream.Write(tablembr.SectorsPerCluster);
+                        stream.Write(tablembr.ReservedSectors);
+                        stream.Write(tablembr.NumeroDeFATS);
+                        stream.Write(tablembr.RootEntryCount);
+                        stream.Write(tablembr.SmallSectors);
+                        stream.Write(tablembr.MediaDescriptor);
+                        stream.Write(tablembr.SectorPerFATS);
+                        stream.Write(tablembr.SectorPerTrack);
+                        stream.Write(tablembr.NumeroHeads);
+                        stream.Write(tablembr.HiddenSectors);
+                        stream.Write(tablembr.LargeSectors);
+                        stream.Write(tablembr.PhysicalDrive);
+                        stream.Write(tablembr.Reservado);
+                        stream.Write(tablembr.ExtBootSignature);
+                        stream.Write(tablembr.Serial);
+                        stream.Write(tablembr.VolumeLabel);
+                        stream.Write(tablembr.FileSystemType);
+                        stream.Write(tablembr.BootCode, 0, tablembr.BootCode.Length);
+                        stream.Write(tablembr.EndOfSector);
 
-                        FileAllocationTable[] FAT = new FileAllocationTable[65525];
+                        FileAllocationTable[] FAT = new FileAllocationTable[65536];
+
+                        for (int i = 0; i < 65536; i++)
+                        {
+                            FAT[i] = new FileAllocationTable();
+                            if (i >= 17)
+                            {
+                                FAT[i].ClusterStart();
+                            }
+                            else
+                            {
+                                FAT[i].ClusterReserved();
+                            }
+                        }
+
                         for (int a = 0; a < 2; a++)
                         {
-                            for (int i = 0; i < 65525; i++)
+                            foreach (FileAllocationTable fen in FAT)
                             {
-                                FAT[i] = new FileAllocationTable();
-                                if (i >= 2)
-                                {
-                                    FAT[i].ClusterStart();
-                                }
-                                else
-                                {
-                                    FAT[i].ClusterReserved();
-                                }
-                            }
-                            foreach (FileAllocationTable fat in FAT)
-                            {
-                                stream.Write(fat.entrada);
+                                stream.Write(fen.entrada);
                             }
                         }
 
@@ -158,6 +160,31 @@ namespace Fat16DiscoVirtual
         private void eliminar_Click(object sender, EventArgs e)
         {
             Default = null;
+        }
+
+        public MasterBootRecord DataConvert(byte[] datos)
+        {
+            if (datos == null)
+                return null;
+
+            BinaryFormatter formatter = new BinaryFormatter();
+
+            using (MemoryStream stream = new MemoryStream(datos))
+            {
+                object obj = formatter.Deserialize(stream);
+                return (MasterBootRecord)obj;
+            }
+        }
+
+        public byte[] ConvertToData(object objeto)
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            
+            using (MemoryStream stream = new MemoryStream())
+            {
+                formatter.Serialize(stream, objeto);
+                return stream.ToArray();
+            }
         }
     }
 }

@@ -56,7 +56,7 @@ namespace Fat16DiscoVirtual.FAT16
             OEMname = Encoding.ASCII.GetBytes("MSWIN4.1");
             BytesPerSector = 512;
             SectorsPerCluster = 32;
-            ReservedSectors = 2;
+            ReservedSectors = 513;
             NumeroDeFATS = 1;
             RootEntryCount = 512;
             EndOfSector = 1;
