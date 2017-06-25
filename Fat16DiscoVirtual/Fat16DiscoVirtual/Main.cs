@@ -110,6 +110,19 @@ namespace Fat16DiscoVirtual
                             stream.Write(EmptyDir.DIR_FileSize);
                         }
                     }
+
+                    Vars.Default = Path.GetFullPath(NewFileDialog.FileName);
+
+                    string rutaIndex = Vars.discoDefault.Substring(0, Vars.discoDefault.Length - 4) + ".index";
+
+                    using (FileStream fi = new FileStream(rutaIndex, FileMode.CreateNew))
+                    {
+                        fi.Seek(0, SeekOrigin.Begin);
+                        fi.WriteByte(0);
+                    }
+
+                    Vars.Index = rutaIndex;
+
                     Main.Default = Path.GetFullPath(NewFileDialog.FileName);
                     MessageBox.Show("Disco Creado Exitosamente!", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
@@ -160,20 +173,6 @@ namespace Fat16DiscoVirtual
         private void eliminar_Click(object sender, EventArgs e)
         {
             Default = null;
-        }
-
-        public MasterBootRecord DataConvert(byte[] datos)
-        {
-            if (datos == null)
-                return null;
-
-            BinaryFormatter formatter = new BinaryFormatter();
-
-            using (MemoryStream stream = new MemoryStream(datos))
-            {
-                object obj = formatter.Deserialize(stream);
-                return (MasterBootRecord)obj;
-            }
         }
 
         public byte[] ConvertToData(object objeto)

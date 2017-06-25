@@ -50,10 +50,16 @@
     <Compile Include="AdministrarDisco.Designer.cs">
       <DependentUpon>AdministrarDisco.cs</DependentUpon>
     </Compile>
+    <Compile Include="BplusTree\BPlusTree.cs" />
+    <Compile Include="BplusTree\IndexNode.cs" />
+    <Compile Include="BplusTree\LeafNode.cs" />
+    <Compile Include="BplusTree\Node.cs" />
+    <Compile Include="BplusTree\Operations.cs" />
     <Compile Include="FAT16\DirectoryEntry.cs" />
     <Compile Include="FAT16\DMBR.cs" />
     <Compile Include="FAT16\FileAllocationTable.cs" />
     <Compile Include="FAT16\MasterBootRecord.cs" />
+    <Compile Include="FAT16\Vars.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>

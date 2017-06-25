@@ -45,7 +45,7 @@ namespace Fat16DiscoVirtual.FAT16
     
         public void DatosMBR ()
         {
-            byte[] VLabel = Encoding.ASCII.GetBytes("DiscoLocal");
+            byte[] VLabel = Encoding.ASCII.GetBytes("Local Disk");
             Array.Resize<byte>(ref VLabel, 11);
             byte[] FStype = Encoding.ASCII.GetBytes("FAT16");
             Array.Resize<byte>(ref FStype, 8);
@@ -56,7 +56,7 @@ namespace Fat16DiscoVirtual.FAT16
             OEMname = Encoding.ASCII.GetBytes("MSWIN4.1");
             BytesPerSector = 512;
             SectorsPerCluster = 32;
-            ReservedSectors = 513;
+            ReservedSectors = 512;
             NumeroDeFATS = 1;
             RootEntryCount = 512;
             EndOfSector = 1;
