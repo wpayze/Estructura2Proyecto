@@ -15,10 +15,10 @@ namespace Fat16DiscoVirtual.BplusTree
             children = new List<Node>(newChildren);
         }
 
-        public void insertSorted(Entry<int, Node> e, int index)
+        /*public void insertSorted(Entry<int, Node> e, int index)
         {
             int key = e.getKey();
             Node child = e.getValue();
-        }
+        }*/
     }
 }

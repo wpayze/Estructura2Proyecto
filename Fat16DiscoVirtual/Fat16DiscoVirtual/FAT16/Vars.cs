@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Fat16DiscoVirtual.FAT16
 {
-    class Vars
+    static class Vars
     {
         public const int m = 4;
         public static string Default { get; set; }

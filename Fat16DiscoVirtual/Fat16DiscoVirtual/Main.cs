@@ -24,7 +24,7 @@ namespace Fat16DiscoVirtual
             this.StartPosition=FormStartPosition.CenterScreen;
         }
 
-        public static string Default { get; set; }
+        public static string Disk { get; set; }
 
         private void creardisco_Click(object sender, EventArgs e)
         {
@@ -113,7 +113,7 @@ namespace Fat16DiscoVirtual
 
                     Vars.Default = Path.GetFullPath(NewFileDialog.FileName);
 
-                    string rutaIndex = Vars.discoDefault.Substring(0, Vars.discoDefault.Length - 4) + ".index";
+                    string rutaIndex = Vars.Default.Substring(0, Vars.Default.Length - 4) + ".index";
 
                     using (FileStream fi = new FileStream(rutaIndex, FileMode.CreateNew))
                     {
@@ -123,7 +123,7 @@ namespace Fat16DiscoVirtual
 
                     Vars.Index = rutaIndex;
 
-                    Main.Default = Path.GetFullPath(NewFileDialog.FileName);
+                    Main.Disk = Path.GetFullPath(NewFileDialog.FileName);
                     MessageBox.Show("Disco Creado Exitosamente!", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
                 else
@@ -142,7 +142,7 @@ namespace Fat16DiscoVirtual
             {
                 if (File.Exists(pfd.FileName))
                 {
-                    Default = Path.GetFullPath(pfd.FileName);
+                    Disk = Path.GetFullPath(pfd.FileName);
                     MessageBox.Show("Disco listo para ser administrado!", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
@@ -155,7 +155,7 @@ namespace Fat16DiscoVirtual
 
         private void administrardisco_Click(object sender, EventArgs e)
         {
-            if (Default != null)
+            if (Disk != null)
             {
                 if (!Application.OpenForms.OfType<AdministrarDisco>().Any())
                 {
@@ -172,7 +172,7 @@ namespace Fat16DiscoVirtual
 
         private void eliminar_Click(object sender, EventArgs e)
         {
-            Default = null;
+            Disk = null;
         }
 
         public byte[] ConvertToData(object objeto)

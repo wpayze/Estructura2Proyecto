@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Fat16DiscoVirtual.FAT16
 {
     [Serializable]
-    class FileAllocationTable
+    public class FileAllocationTable
     {
         public ushort entrada { get; set; }
 

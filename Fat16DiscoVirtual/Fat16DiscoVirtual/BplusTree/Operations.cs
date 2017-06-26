@@ -3,190 +3,131 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Fat16DiscoVirtual.FAT16;
 
 namespace Fat16DiscoVirtual.BplusTree
 {
     class Operations
     {
+        LeafNode hoja = new LeafNode();
+        //Initial Insert to tree
         public static Node insert(Node newNode, LeafNode newLeaf)
         {
-            // initial insert to tree
-            if (LeafNode.index == false)
+            if (newLeaf.index == false)
             {
-                hoja.Nodos.Add(nuevoNodo);
-                hoja.Nodos = hoja.Nodos.OrderBy(x => x.nombre).ToList();
-                if (hoja.Nodos.Count() > Constants.ordenArbol)
+                newLeaf.values.Add(newNode);
+                newLeaf.values = newLeaf.values.OrderBy(x => x.name).ToList();
+
+                if (newLeaf.values.Count() > Vars.m)
                 {
-                    Nodo promovido = Promover(hoja);
-                    return promovido;
+                    Node promoted = Promover(newLeaf);
+                    return promoted;
                 }
                 else
                 {
                     return null;
                 }
             }
-            else //si la raiz actual es un indice
+            else 
             {
-                int tamanioHoja = hoja.Nodos.Count();
-                for (int i = 0; i < tamanioHoja; i++)
-                {
-                    Nodo nodoActual = hoja.Nodos.ElementAt(i);
+                int LeafSize = newLeaf.values.Count();
 
-                    int c = string.Compare(nuevoNodo.nombre, nodoActual.nombre);
+                for (int i = 0; i < LeafSize; i++)
+                {
+                    Node actual = newLeaf.values.ElementAt(i);
+
+                    int c = string.Compare(newNode.name, actual.name);
                     if (c == -1)
                     {
-                        Nodo promovido = insertarNodo(nuevoNodo, nodoActual.hijosIzq);
-                        if (promovido != null)
+                        Node promoted = insert(newNode, actual.LeftValues);
+                        if (promoted != null)
                         {
-                            nodoActual.hijosIzq = promovido.hijosDer;
+                            actual.LeftValues = promoted.RightValues;
                         }
-                        return promovido;
+                        return promoted;
                     }
                     else
                     {
-                        if (i != tamanioHoja - 1)
+                        if (i != LeafSize - 1)
                         {
-                            Nodo nodoSiguiente = hoja.Nodos.ElementAt(i + 1);
-                            c = string.Compare(nuevoNodo.nombre, nodoSiguiente.nombre);
+                            Node nextNode = newLeaf.values.ElementAt(i + 1);
+                            c = string.Compare(newNode.name, nextNode.name);
+
                             if (c == -1)
                             {
-                                Nodo promovido = insertarNodo(nuevoNodo, nodoActual.hijosDer);
-                                if (promovido != null)
+                                Node promoted = insert(newNode, actual.RightValues);
+                                if (promoted != null)
                                 {
-                                    nodoActual.hijosDer = new Hoja();
-                                    nodoActual.hijosDer = promovido.hijosIzq;
-                                    nodoSiguiente.hijosIzq = promovido.hijosDer;
+                                    actual.RightValues = new LeafNode();
+                                    actual.RightValues = promoted.LeftValues
+;
+                                    nextNode.LeftValues = promoted.RightValues;
                                 }
-                                return promovido;
+                                return promoted;
                             }
                             else
                             {
-                                Nodo promovido = insertarNodo(nuevoNodo, nodoSiguiente.hijosDer);
-                                if (promovido != null)
+                                Node promoted = insert(newNode, nextNode.RightValues);
+                                if (promoted != null)
                                 {
-                                    nodoSiguiente.hijosDer = new Hoja();
-                                    nodoSiguiente.hijosDer = promovido.hijosIzq;
+                                    nextNode.RightValues = new LeafNode();
+                                    nextNode.RightValues = promoted.LeftValues;
                                 }
-                                return promovido;
+                                return promoted;
                             }
                         }
                         else
                         {
-                            Nodo promovido = insertarNodo(nuevoNodo, nodoActual.hijosDer);
-                            if (promovido != null)
+                            Node promoted = insert(newNode, actual.RightValues);
+                            if (promoted != null)
                             {
-                                nodoActual.hijosDer = new Hoja();
-                                nodoActual.hijosDer = promovido.hijosIzq;
+                                actual.RightValues = new LeafNode();
+                                actual.RightValues = promoted.LeftValues;
                             }
-                            return promovido;
+                            return promoted;
                         }
                     }
                 }
                 return null;
             }
         }
-        public static Nodo Promover(Hoja hoja)
-        {
-            Nodo nodoaPromover;
-            int posicionMedio = Constants.ordenArbol / 2;
-            nodoaPromover = hoja.Nodos.ElementAt(posicionMedio);
-            Hoja hijosIzq = new Hoja();
-            Hoja hijosDer = new Hoja();
 
-            if (hoja.indice)
+        public static Node Promover(LeafNode hoja)
+        {
+            Node NodePromoted;
+            int Middle = Vars.m / 2;
+            NodePromoted = hoja.values.ElementAt(Middle);
+            LeafNode RightValues = new LeafNode();
+            LeafNode LeftValues = new LeafNode();
+
+            if (hoja.index != null)
             {
-                hijosIzq.nuevoIndice();
-                hijosDer.nuevoIndice();
-                hoja.Nodos.RemoveAt(posicionMedio);
+                hoja.newIndex();
+                RightValues.newIndex();
+                hoja.values.RemoveAt(Middle);
 
             }
             else
             {
-                hijosIzq.nuevaHoja();
-                hijosDer.nuevaHoja();
+                LeftValues.newLeaf();
+                RightValues.newLeaf();
             }
 
-            hijosIzq.Nodos = hoja.Nodos.Take(posicionMedio).ToList();
-            hijosDer.Nodos = hoja.Nodos.Skip(posicionMedio).ToList();
-
-            if (hoja.indice)
+            if (hoja.index)
             {
-                hijosIzq.hojaSiguiente = null;
+                LeftValues.nextLeaf= null;
             }
             else
             {
-                hijosIzq.hojaSiguiente = hijosDer;
+               LeftValues.nextLeaf = RightValues;
             }
-            nodoaPromover.hijosIzq = hijosIzq;
-            nodoaPromover.hijosDer = hijosDer;
-            return nodoaPromover;
+            NodePromoted.LeftValues = LeftValues;
+            NodePromoted.RightValues = RightValues;
+            return NodePromoted;
         }
 
-        public static void imprimirArbol(Hoja raiz)
-        {
-            recorridoRecursivo(raiz);
-            Console.Write("\n");
-        }
 
-        public static void recorridoRecursivo(Hoja hoja)
-        {
-
-            if (hoja.indice == true)
-            {
-                foreach (Nodo n in hoja.Nodos)
-                {
-                    Console.Write("\n");
-
-                    string nombre = n.nombre;
-
-                    Console.WriteLine(nombre);
-
-
-                    Console.Write("\tIzquierda\n");
-
-                    recorridoRecursivo(n.hijosIzq);
-
-
-                    Console.Write("\tDerecha\n");
-                    recorridoRecursivo(n.hijosDer);
-
-                    Console.WriteLine("----------------------------");
-                }
-            }
-            else
-            {
-                Console.Write("\t");
-                foreach (Nodo n in hoja.Nodos)
-                {
-                    string nombre = n.nombre;
-                    Console.Write(nombre + " ");
-                }
-                Console.Write("\n");
-
-            }
-        }
-        public static void guardarArbol(ArbolBPlus arbol)
-        {
-            string serializationFile = Constants.discoIndice;
-            using (Stream stream = File.Open(serializationFile, FileMode.Create))
-            {
-                var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-
-                bformatter.Serialize(stream, arbol);
-            }
-        }
-
-        public static ArbolBPlus cargarArbol()
-        {
-            string serializationFile = Constants.discoIndice;
-            ArbolBPlus result = new ArbolBPlus();
-            using (Stream stream = File.Open(serializationFile, FileMode.Open))
-            {
-                var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-
-                result = (ArbolBPlus)bformatter.Deserialize(stream);
-            }
-            return result;
+       
         }
     }
-}
+

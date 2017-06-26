@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Fat16DiscoVirtual.BplusTree
 {
-    class Node
+    public class Node
     {
         protected bool isLeafNode { get; set; }
         protected bool keys { get; set; }

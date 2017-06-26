@@ -6,11 +6,16 @@ using System.Threading.Tasks;
 
 namespace Fat16DiscoVirtual.BplusTree
 {
-    class LeafNode
+    public class LeafNode
     {
         public bool index { get; set; }
         public List<Node> values { get; set; }
         public LeafNode nextLeaf { get; set; }
+
+       public LeafNode()
+       {
+
+        }
 
         public void newIndex()
         {

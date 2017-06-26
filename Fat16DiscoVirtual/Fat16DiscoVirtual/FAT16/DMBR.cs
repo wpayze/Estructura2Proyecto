@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Fat16DiscoVirtual.FAT16
 {
-    class DMBR
+    public class DMBR
     {
         public DMBR()
         {

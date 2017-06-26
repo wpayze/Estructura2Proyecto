@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Fat16DiscoVirtual.FAT16
 {
-    class DirectoryEntry
+    public class DirectoryEntry
     {
         public DirectoryEntry()
         {
